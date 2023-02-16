@@ -82,3 +82,23 @@ mysql> select * from Employee_Payroll;
 |  3 | Rashmi  |  32000 | 2017-08-15 |
 +----+---------+--------+------------+
 3 rows in set (0.15 sec)
+----------------------------------------------------------------------------------------------------------
+UC5 :Ability to retrieve salary data for a particular employee as well as all employees who have
+     joined in a particular data range from the payroll service database.
+----------------------------------------------------------------------------------------------------------
+mysql> select * from Employee_Payroll where name = 'Shiwani';
++----+---------+--------+------------+
+| id | name    | salary | start      |
++----+---------+--------+------------+
+|  1 | Shiwani |  30000 | 2018-07-18 |
++----+---------+--------+------------+
+1 row in set (0.08 sec)
+
+mysql> select * from Employee_Payroll where start between cast('2018-01-01' as DATE) and DATE(NOW());
++----+---------+--------+------------+
+| id | name    | salary | start      |
++----+---------+--------+------------+
+|  1 | Shiwani |  30000 | 2018-07-18 |
+|  2 | Nirmala |  28000 | 2020-02-12 |
++----+---------+--------+------------+
+2 rows in set (0.02 sec)
