@@ -102,3 +102,44 @@ mysql> select * from Employee_Payroll where start between cast('2018-01-01' as D
 |  2 | Nirmala |  28000 | 2020-02-12 |
 +----+---------+--------+------------+
 2 rows in set (0.02 sec)
+---------------------------------------------------------------------------------------------------------
+
+UC6 :Ability to add Gender to Employee Payroll Table and Update the Rows to reflect the correct Employee Gender.
+---------------------------------------------------------------------------------------------------------
+mysql> insert into Employee_Payroll(name,salary,start)values
+    ->  ('Ram',33000.00,'2017-08-17');
+Query OK, 1 row affected (0.03 sec)
+
+mysql>  select * from Employee_Payroll;
++----+---------+--------+--------+------------+
+| id | name    | gender | salary | start      |
++----+---------+--------+--------+------------+
+|  1 | Shiwani | NULL   |  30000 | 2018-07-18 |
+|  2 | Nirmala | NULL   |  28000 | 2020-02-12 |
+|  3 | Rashmi  | NULL   |  32000 | 2017-08-15 |
+|  4 | Ram     | NULL   |  33000 | 2017-08-17 |
++----+---------+--------+--------+------------+
+4 rows in set (0.01 sec)
+
+mysql> alter table Employee_Payroll add gender VARCHAR(6) after name;
+Query OK, 0 rows affected (0.38 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql>  update Employee_Payroll set gender = 'Female' where name = 'Shiwani' or name = 'Rashmi' or name = 'Nirmala';
+Query OK, 3 rows affected (0.02 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+mysql> update Employee_Payroll set gender = 'Male' where  name = 'Ram';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql>  select * from Employee_Payroll;
++----+---------+--------+--------+------------+
+| id | name    | gender | salary | start      |
++----+---------+--------+--------+------------+
+|  1 | Shiwani | Female |  30000 | 2018-07-18 |
+|  2 | Nirmala | Female |  28000 | 2020-02-12 |
+|  3 | Rashmi  | Female |  32000 | 2017-08-15 |
+|  4 | Ram     | Male   |  33000 | 2017-08-17 |
++----+---------+--------+--------+------------+
+4 rows in set (0.00 sec)
