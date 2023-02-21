@@ -200,3 +200,145 @@ mysql> select COUNT(id) from Employee_Payroll GROUP BY gender;
 |         1 |
 +-----------+
 2 rows in set (0.01 sec)
+--------------------------------------------------------------------------------------------------------------
+UC8 :Ability to extend employee_payroll data to store employee information like employee phone, address and
+     department - Ensure employee department is non nullable fields.
+     - Add Default Value for address field.
+-----------------------------------------------------------------------------------------------------------------
+mysql>  select * from Employee_Payroll;
++----+---------+--------+--------+------------+
+| id | name    | gender | salary | start      |
++----+---------+--------+--------+------------+
+|  1 | Shiwani | Female |  30000 | 2018-07-18 |
+|  2 | Nirmala | Female |  28000 | 2020-02-12 |
+|  3 | Rashmi  | Female |  32000 | 2017-08-15 |
+|  4 | Ram     | Male   |  33000 | 2017-08-17 |
++----+---------+--------+--------+------------+
+4 rows in set (0.01 sec)
+
+mysql>  alter table employee_payroll
+    ->  add phoneNumber INT(10) after name;
+Query OK, 0 rows affected, 1 warning (0.36 sec)
+Records: 0  Duplicates: 0  Warnings: 1
+
+mysql> alter table employee_payroll
+    ->  add address Varchar(20) NOT NULL after PhoneNumber;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employee_payroll
+    ->  add department Varchar(20) NOT NULL after Address;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employee_payroll
+    -> alter address SET DEFAULT 'Umred';
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe employee_payroll;
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| id          | int unsigned | NO   | PRI | NULL    | auto_increment |
+| name        | varchar(15)  | NO   |     | NULL    |                |
+| phoneNumber | int          | YES  |     | NULL    |                |
+| address     | varchar(20)  | NO   |     | Umred   |                |
+| department  | varchar(20)  | NO   |     | NULL    |                |
+| gender      | varchar(6)   | YES  |     | NULL    |                |
+| salary      | double       | NO   |     | NULL    |                |
+| start       | date         | NO   |     | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+8 rows in set (0.05 sec)
+
+mysql>  select * from Employee_Payroll;
++----+---------+-------------+---------+------------+--------+--------+------------+
+| id | name    | phoneNumber | address | department | gender | salary | start      |
++----+---------+-------------+---------+------------+--------+--------+------------+
+|  1 | Shiwani |        NULL |         |            | Female |  30000 | 2018-07-18 |
+|  2 | Nirmala |        NULL |         |            | Female |  28000 | 2020-02-12 |
+|  3 | Rashmi  |        NULL |         |            | Female |  32000 | 2017-08-15 |
+|  4 | Ram     |        NULL |         |            | Male   |  33000 | 2017-08-17 |
++----+---------+-------------+---------+------------+--------+--------+------------+
+4 rows in set (0.00 sec)
+mysql> alter table employee_payroll
+    ->  modify phonenumber
+    -> Varchar(20);
+Query OK, 4 rows affected (0.43 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+mysql> update employee_payroll set phonenumber = '8908641811'
+    ->  where name = 'Shiwani';
+Query OK, 1 row affected (0.03 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql>  update employee_payroll set phonenumber = '7008458748'
+    ->  where name = 'Nirmala';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql>  update employee_payroll set phonenumber = '8168458748'
+    ->  where name = 'Rashmi';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql>  update employee_payroll set phonenumber = '8978458748'
+    ->  where name = 'Ram';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql>  select * from Employee_Payroll;
++----+---------+-------------+---------+------------+--------+--------+------------+
+| id | name    | phonenumber | address | department | gender | salary | start      |
++----+---------+-------------+---------+------------+--------+--------+------------+
+|  1 | Shiwani | 8908641811  |         |            | Female |  30000 | 2018-07-18 |
+|  2 | Nirmala | 7008458748  |         |            | Female |  28000 | 2020-02-12 |
+|  3 | Rashmi  | 8168458748  |         |            | Female |  32000 | 2017-08-15 |
+|  4 | Ram     | 8978458748  |         |            | Male   |  33000 | 2017-08-17 |
++----+---------+-------------+---------+------------+--------+--------+------------+
+4 rows in set (0.00 sec)
+mysql> update employee_payroll set address = 'Umred'
+    ->  where name = 'Rashmi' or name = 'Shiwani' or name = 'Nirmala' or name = 'Ram';
+Query OK, 4 rows affected (0.01 sec)
+Rows matched: 4  Changed: 4  Warnings: 0
+
+mysql>  select * from Employee_Payroll;
++----+---------+-------------+---------+------------+--------+--------+------------+
+| id | name    | phonenumber | address | department | gender | salary | start      |
++----+---------+-------------+---------+------------+--------+--------+------------+
+|  1 | Shiwani | 8908641811  | Umred   |            | Female |  30000 | 2018-07-18 |
+|  2 | Nirmala | 7008458748  | Umred   |            | Female |  28000 | 2020-02-12 |
+|  3 | Rashmi  | 8168458748  | Umred   |            | Female |  32000 | 2017-08-15 |
+|  4 | Ram     | 8978458748  | Umred   |            | Male   |  33000 | 2017-08-17 |
++----+---------+-------------+---------+------------+--------+--------+------------+
+4 rows in set (0.00 sec)
+
+mysql>  update employee_payroll set department = 'Devloper'
+    ->  where name = 'Shiwani';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql>  update employee_payroll set department = 'Testing'
+    ->  where name = 'Nirmala';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql>  update employee_payroll set department = 'Production'
+    ->  where name = 'Rashmi';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql>  update employee_payroll set department = 'Design'
+    ->  where name = 'Ram';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql>  select * from Employee_Payroll;
++----+---------+-------------+---------+------------+--------+--------+------------+
+| id | name    | phonenumber | address | department | gender | salary | start      |
++----+---------+-------------+---------+------------+--------+--------+------------+
+|  1 | Shiwani | 8908641811  | Umred   | Devloper   | Female |  30000 | 2018-07-18 |
+|  2 | Nirmala | 7008458748  | Umred   | Testing    | Female |  28000 | 2020-02-12 |
+|  3 | Rashmi  | 8168458748  | Umred   | Production | Female |  32000 | 2017-08-15 |
+|  4 | Ram     | 8978458748  | Umred   | Design     | Male   |  33000 | 2017-08-17 |
++----+---------+-------------+---------+------------+--------+--------+------------+
+4 rows in set (0.00 sec)
