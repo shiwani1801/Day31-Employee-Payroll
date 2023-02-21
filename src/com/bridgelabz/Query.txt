@@ -342,3 +342,87 @@ mysql>  select * from Employee_Payroll;
 |  4 | Ram     | 8978458748  | Umred   | Design     | Male   |  33000 | 2017-08-17 |
 +----+---------+-------------+---------+------------+--------+--------+------------+
 4 rows in set (0.00 sec)
+-------------------------------------------------------------------------------------------------------------
+UC9 :Ability to extend employee_payroll table to have Basic Pay, Deductions, Taxable Pay, Income Tax, Net Pay
+-------------------------------------------------------------------------------------------------------------
+ alter table employee_payroll add basicpay Double NOT NULL after salary;
+Query OK, 0 rows affected (0.19 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employee_payroll add deduction Double NOT NULL after basicpay;
+Query OK, 0 rows affected (0.06 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employee_payroll add taxablepay Double NOT NULL after deduction;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employee_payroll add incometax Double NOT NULL after taxablepay;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employee_payroll add netpay Double NOT NULL after incometax;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe employee_payroll;
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| id          | int unsigned | NO   | PRI | NULL    | auto_increment |
+| name        | varchar(15)  | NO   |     | NULL    |                |
+| phonenumber | varchar(20)  | YES  |     | NULL    |                |
+| address     | varchar(20)  | NO   |     | Umred   |                |
+| department  | varchar(20)  | NO   |     | NULL    |                |
+| gender      | varchar(6)   | YES  |     | NULL    |                |
+| salary      | double       | NO   |     | NULL    |                |
+| basicpay    | double       | NO   |     | NULL    |                |
+| deduction   | double       | NO   |     | NULL    |                |
+| taxablepay  | double       | NO   |     | NULL    |                |
+| incometax   | double       | NO   |     | NULL    |                |
+| netpay      | double       | NO   |     | NULL    |                |
+| start       | date         | NO   |     | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+13 rows in set (0.04 sec)
+
+mysql>  select * from Employee_Payroll;
++----+---------+-------------+---------+------------+--------+--------+----------+-----------+------------+-----------+--------+------------+
+| id | name    | phonenumber | address | department | gender | salary | basicpay | deduction | taxablepay | incometax | netpay | start      |
++----+---------+-------------+---------+------------+--------+--------+----------+-----------+------------+-----------+--------+------------+
+|  1 | Shiwani | 8908641811  | Umred   | Devloper   | Female |  30000 |        0 |         0 |          0 |         0 |      0 | 2018-07-18 |
+|  2 | Nirmala | 7008458748  | Umred   | Testing    | Female |  28000 |        0 |         0 |          0 |         0 |      0 | 2020-02-12 |
+|  3 | Rashmi  | 8168458748  | Umred   | Production | Female |  32000 |        0 |         0 |          0 |         0 |      0 | 2017-08-15 |
+|  4 | Ram     | 8978458748  | Umred   | Design     | Male   |  33000 |        0 |         0 |          0 |         0 |      0 | 2017-08-17 |
++----+---------+-------------+---------+------------+--------+--------+----------+-----------+------------+-----------+--------+------------+
+4 rows in set (0.01 sec)
+
+mysql> update employee_payroll set basicpay = '13700', deduction = '2000', taxablepay = '1500', incometax = '1500', netpay = '11300'
+    ->  where name = 'Shiwani';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set basicpay = '12000', deduction = '1800', taxablepay = '1300', incometax = '1300', netpay = '13400'
+    ->  where name = 'Nirmala';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set basicpay = '15000', deduction = '2200', taxablepay = '2000', incometax = '2000', netpay = '10800'
+    ->  where name = 'Rashmi';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set basicpay = '15000', deduction = '2200', taxablepay = '2000', incometax = '1600', netpay = '10000'
+    ->  where name = 'Ram';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql>  select * from Employee_Payroll;
++----+---------+-------------+---------+------------+--------+--------+----------+-----------+------------+-----------+--------+------------+
+| id | name    | phonenumber | address | department | gender | salary | basicpay | deduction | taxablepay | incometax | netpay | start      |
++----+---------+-------------+---------+------------+--------+--------+----------+-----------+------------+-----------+--------+------------+
+|  1 | Shiwani | 8908641811  | Umred   | Devloper   | Female |  30000 |    13700 |      2000 |       1500 |      1500 |  11300 | 2018-07-18 |
+|  2 | Nirmala | 7008458748  | Umred   | Testing    | Female |  28000 |    12000 |      1800 |       1300 |      1300 |  13400 | 2020-02-12 |
+|  3 | Rashmi  | 8168458748  | Umred   | Production | Female |  32000 |    15000 |      2200 |       2000 |      2000 |  10800 | 2017-08-15 |
+|  4 | Ram     | 8978458748  | Umred   | Design     | Male   |  33000 |    15000 |      2200 |       2000 |      1600 |  10000 | 2017-08-17 |
++----+---------+-------------+---------+------------+--------+--------+----------+-----------+------------+-----------+--------+------------+
+4 rows in set (0.00 sec)
